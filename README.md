@@ -2,7 +2,7 @@
 
 The purpose of this project is to create an interactive map which visualizes different sets of migration data 
 
-maps built using Mapbox GL
+Maps built using Mapbox GL
 
 Team Binary Bros
 
