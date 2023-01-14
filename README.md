@@ -4,6 +4,8 @@ The purpose of this project is to create an interactive map which visualizes dif
 
 Maps built using Mapbox GL
 
+https://docs.mapbox.com/mapbox-gl-js/guides/
+
 Team Binary Bros
 
 ## Installation
