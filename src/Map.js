@@ -60,9 +60,9 @@ const Map = () => {
         <div>
             <div ref={mapContainer} className="map-container" />
             <div className="map-overlay">
-                <form class="form">
+                {/* <form class="form">
                     <input id="search" class="input" placeholder="Search..." /> 
-                </form>
+                </form> */}
             </div>
         </div>
     );
