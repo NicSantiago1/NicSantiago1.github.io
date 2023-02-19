@@ -1,6 +1,9 @@
 import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import countries from './geodata/countries.geojson';
+import NavBar from './NavBar';
+
+import './Map.css';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibnNhbnRpYWdvMTgiLCJhIjoiY2xjcjQybXE1MGJ5ZDN2bWZtbXlzemRwYyJ9.MVzA2sRffOdZfca9fTiNtQ';
 
@@ -12,7 +15,7 @@ const Map = () => {
     useEffect(() => {
         const map = new mapboxgl.Map({
           container: mapContainer.current,
-          style: 'mapbox://styles/mapbox/streets-v11',
+          style: 'mapbox://styles/mapbox/navigation-night-v1?optimize=true',
           center: [16, 48],
           zoom: 3
         });
@@ -58,12 +61,10 @@ const Map = () => {
 
     return (
         <div>
-            <div ref={mapContainer} className="map-container" />
-            <div className="map-overlay">
-                {/* <form class="form">
-                    <input id="search" class="input" placeholder="Search..." /> 
-                </form> */}
-            </div>
+          <NavBar />
+          <div ref={mapContainer} className="map-container" />
+          <div className="map-overlay">
+          </div>
         </div>
     );
 }
