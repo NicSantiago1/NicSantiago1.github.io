@@ -61,10 +61,8 @@ const Map = () => {
 
     return (
         <div>
-          <NavBar />
           <div ref={mapContainer} className="map-container" />
-          <div className="map-overlay">
-          </div>
+          <NavBar />
         </div>
     );
 }

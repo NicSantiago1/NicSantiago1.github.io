@@ -22,7 +22,7 @@ export default function NavBar() {
     return(
         <Box sx={{ flexGrow: 1}}>
             <ThemeProvider theme={darkTheme}>
-                <AppBar position="static" color="primary">
+                <AppBar color="primary">
                     <Toolbar>
                         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                             Migration Data Project
