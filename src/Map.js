@@ -9,62 +9,101 @@ mapboxgl.accessToken = 'pk.eyJ1IjoibnNhbnRpYWdvMTgiLCJhIjoiY2xjcjQybXE1MGJ5ZDN2b
 
 const Map = () => {
     const mapContainer = useRef(null);
+    const [active, setActive] = useState(null);
     const [map, setMap] = useState(null);
 
     // Initialize the map
     useEffect(() => {
         const map = new mapboxgl.Map({
           container: mapContainer.current,
-          style: 'mapbox://styles/mapbox/navigation-night-v1?optimize=true',
+          style: 'mapbox://styles/mapbox/satellite-streets-v11',
           center: [16, 48],
           zoom: 3
         });
 
         map.on('load', () => {
-            map.addSource('countries', {
-                'type': 'geojson',
-                countries
-            });
 
-            map.setLayoutProperty('country-label', 'text-field', [
-                'format',
-                ['get', 'name_en'],
-                { 'font-scale': 1.2 },
-                '\n',
-                {},
-                ['get', 'name'],
-                {
-                  'font-scale': 0.8,
-                  'text-font': [
-                    'literal',
-                    ['DIN Offc Pro Italic', 'Arial Unicode MS Regular']
-                  ]
+          // Get the index of the first symbol layer in the map style
+          const layers = map.getStyle().layers;
+          let firstSymbolId;
+          for (const layer of layers) {
+            if (layer.type === 'symbol') {
+              firstSymbolId = layer.id;
+              break;
+            }
+          }          
+
+          // Add the geojson as a source
+          map.addSource('countries', {
+              'type': 'geojson',
+              'data': countries
+          });
+
+          // Add labels from the geojson source
+          map.setLayoutProperty('country-label', 'text-field', [
+            'format',
+            ['get', 'name_en'],
+            { 'font-scale': 1.2 },
+            '\n',
+            {},
+            ['get', 'name'],
+            {
+              'font-scale': 0.8,
+              'text-font': [
+                'literal',
+                ['DIN Offc Pro Italic', 'Arial Unicode MS Regular']
+              ]
+            }
+          ]);
+
+          // Add in a color fill layer from the geojson source
+          map.addLayer(
+            {
+              id: 'countries-fill',
+              type: 'fill',
+              source: 'countries',
+            },
+            'country-label'
+          );
+
+          // Add in an outline layer from the geojson source
+          map.addLayer(
+            {
+              id: 'countries-outline',
+              type: 'line',
+              source: 'countries',
+              layout: {},
+              paint: {
+                'line-color': '#000',
+                'line-width': 1
                 }
-              ]);
-    
-              map.addLayer({
-                  id: 'countries',
-                  type: 'fill',
-                  source: 'countries',
-                  'source-layer': 'countries'
-                },
-                'country-label'
-              );
-            
-              map.setPaintProperty('countries', 'fill-color', '#0000FF');
-    
-              setMap(map);
+            },
+            'country-label'
+          );
+  
+          map.setPaintProperty('countries-fill', 'fill-color', '#A4218E');
+  
+          setMap(map);
         });
 
         return () => map.remove();
     }, []);
 
+    useEffect(() => {
+      paint();
+    }, [active]);
+
+    const paint = () => {
+      if (map) {
+        map.setPaintProperty('countries-fill', 'fill-color', '#000080');
+      }
+    };
+
     return (
         <div>
-          <NavBar />
           <div ref={mapContainer} className="map-container" />
-          <div className="map-overlay">
-          </div>
+          <NavBar />
+          <button className='map-overlay' onClick={() => setActive('yes')}> Map </button>
         </div>
     );
 }
