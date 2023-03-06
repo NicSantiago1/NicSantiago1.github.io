@@ -25,10 +25,12 @@ const Map = () => {
     useEffect(() => {
         const map = new mapboxgl.Map({
           container: mapContainer.current,
-          style: 'mapbox://styles/nsantiago18/clew3cebz009501qrtetpd6cg',
+          style: 'mapbox://styles/nsantiago18/clex8n530000g01mszz6zanjx',
           center: [16, 48],
           zoom: 3,
         });
+
+        let hoveredStateId = null;
 
         map.on('load', () => {  
 
@@ -44,6 +46,9 @@ const Map = () => {
               id: 'countries-fill',
               type: 'fill',
               source: 'countries',
+              paint: {
+                'fill-color': 'rgba(50, 54, 168, 0.5)'
+              }
             },
             'country-label'
           );
@@ -63,41 +68,48 @@ const Map = () => {
             'country-label'
           );
 
-          map.addSource('centroids', {
-            'type': 'geojson',
-            'data': centroids
-          })
-
-          map.addLayer({
-            id: 'places',
-            type: 'symbol',
-            source: 'centroids',
-            layout: {
-              'icon-image': ['get', 'icon'],
-              'icon-allow-overlap': true
-            }
+          // Trying to add a hover effect
+          map.on('mousemove', 'countries', (e) => {
+            if (e.features.length > 0) {
+              if (hoveredStateId !== null) {
+                map.setFeatureState(
+                  { source: 'countries', id: hoveredStateId },
+                  { hover: false }
+                );
+              }
+              hoveredStateId = e.features[0].id;
+              map.setFeatureState(
+                { source: 'countries', id: hoveredStateId },
+                { hover: true }
+                );
+              }
           });
 
-          map.on('click', 'places', (e) => {
-            const coordinates = e.features[0].geometry.coordinates.slice();
-            const name = e.features[0].properties.ADMIN; 
+          // map.addSource('centroids', {
+          //   'type': 'geojson',
+          //   'data': centroids
+          // })
 
-            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-              coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-            }
-
-            new mapboxgl.Popup().setLngLat(coordinates).setHTML(name).addTo(map);
-          })
-
-          // map.on('mouseenter', 'places', () => {
-          //   map.getCanvas().style.cursor = 'pointer';
+          // map.addLayer({
+          //   id: 'places',
+          //   type: 'symbol',
+          //   source: 'centroids',
+          //   layout: {
+          //     'icon-image': ['get', 'icon'],
+          //     'icon-allow-overlap': true
+          //   }
           // });
 
-          // map.on('mouseleave', 'places', () => {
-          //   map.getCanvas().style.cursor = '';
-          // });
+          // map.on('click', 'places', (e) => {
+          //   const coordinates = e.features[0].geometry.coordinates.slice();
+          //   const name = e.features[0].properties.COUNTRYAFF; 
 
-          map.setPaintProperty('countries-fill', 'fill-color', '#A4218E');
+          //   while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+          //     coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+          //   }
+
+          //   new mapboxgl.Popup().setLngLat(coordinates).setHTML(name).addTo(map);
+          // })
   
           setMap(map);
         });
@@ -106,21 +118,10 @@ const Map = () => {
         return () => map.remove();
     }, []);
 
-    useEffect(() => {
-      paint();
-    }, [active]);
-
-    const paint = () => {
-      if (map) {
-        map.setPaintProperty('countries-fill', 'fill-color', '#000080');
-      }
-    };
-
     return (
         <div>
           <div ref={mapContainer} className="map-container" />
           <NavBar />
-          <button className='map-overlay' onClick={() => setActive('yes')}> Change Color </button>
         </div>
     );
 }
