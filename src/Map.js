@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import countries from './geodata/countries.geojson';
-import centroids from './geodata/centroids.geojson';
 import NavBar from './NavBar';
 
 import './Map.css';
@@ -9,14 +8,6 @@ import './Map.css';
 mapboxgl.accessToken = 'pk.eyJ1IjoibnNhbnRpYWdvMTgiLCJhIjoiY2xjcjN5cDRnMGJwbjNwbjJodjZzM2htZiJ9.j9PqvIjlbwoNyZsEqmFrqg';
 
 const Map = () => {
-    const options = [
-      {
-        name: 'Name',
-        description: 'Country name',
-        property: 'ADMIN'
-      }
-    ]
-
     const mapContainer = useRef(null);
     const [active, setActive] = useState(null);
     const [map, setMap] = useState(null);
@@ -37,7 +28,8 @@ const Map = () => {
           // Add the geojson as a source
           map.addSource('countries', {
               'type': 'geojson',
-              'data': countries
+              'data': countries,
+              'generateId': true
           });
 
           // Add in a color fill layer from the geojson source
@@ -46,8 +38,15 @@ const Map = () => {
               id: 'countries-fill',
               type: 'fill',
               source: 'countries',
+              layout: {},
               paint: {
-                'fill-color': 'rgba(50, 54, 168, 0.5)'
+                'fill-color': '#3366FF',
+                'fill-opacity': [
+                  'case',
+                  ['boolean', ['feature-state', 'hover'], false],
+                  1,
+                  0.5
+                ]
               }
             },
             'country-label'
@@ -68,49 +67,54 @@ const Map = () => {
             'country-label'
           );
 
-          // Trying to add a hover effect
-          map.on('mousemove', 'countries', (e) => {
+          // Hover effect to change opacity of country fill
+          map.on('mousemove', 'countries-fill', (e) => {
             if (e.features.length > 0) {
               if (hoveredStateId !== null) {
                 map.setFeatureState(
-                  { source: 'countries', id: hoveredStateId },
-                  { hover: false }
+                  { 
+                    source: 'countries',
+                    id: hoveredStateId 
+                  },
+                  { 
+                    hover: false 
+                  }
                 );
               }
               hoveredStateId = e.features[0].id;
               map.setFeatureState(
-                { source: 'countries', id: hoveredStateId },
-                { hover: true }
-                );
-              }
+                { 
+                  source: 'countries', 
+                  id: hoveredStateId 
+                },
+                { 
+                  hover: true 
+                }
+              );
+            }
           });
 
-          // map.addSource('centroids', {
-          //   'type': 'geojson',
-          //   'data': centroids
-          // })
+          map.on('mouseleave', 'countries-fill', () => {
+            if (hoveredStateId !== null) {
+              map.setFeatureState(
+                { 
+                  source: 'countries', 
+                  id: hoveredStateId 
+                },
+                { 
+                  hover: false 
+                }
+              );
+            }
+            hoveredStateId = null;
+          });
 
-          // map.addLayer({
-          //   id: 'places',
-          //   type: 'symbol',
-          //   source: 'centroids',
-          //   layout: {
-          //     'icon-image': ['get', 'icon'],
-          //     'icon-allow-overlap': true
-          //   }
-          // });
 
-          // map.on('click', 'places', (e) => {
-          //   const coordinates = e.features[0].geometry.coordinates.slice();
-          //   const name = e.features[0].properties.COUNTRYAFF; 
+          // Country popup on click
+          map.on('click', 'countries-fill', (e) => {
+            new mapboxgl.Popup().setLngLat(e.lngLat).setHTML(e.features[0].properties.ADMIN).addTo(map);
+          })
 
-          //   while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-          //     coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-          //   }
-
-          //   new mapboxgl.Popup().setLngLat(coordinates).setHTML(name).addTo(map);
-          // })
-  
           setMap(map);
         });
 
