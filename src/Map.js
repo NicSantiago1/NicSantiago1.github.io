@@ -2,35 +2,33 @@ import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import countries from './geodata/countries.geojson';
 import NavBar from './NavBar';
-import YearSlider from './YearSlider';
-import Modal from '@mui/material/Modal';
-import ReactDOM from 'react-dom';
-
+import Legend from './Legend';
 import './Map.css';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibnNhbnRpYWdvMTgiLCJhIjoiY2xjcjN5cDRnMGJwbjNwbjJodjZzM2htZiJ9.j9PqvIjlbwoNyZsEqmFrqg';
 
 const Map = () => {
+  const options = [
+    {
+      name: 'Net Migration',
+      description: 'Citizens who left the country this year',
+      property: 'migrants_est',
+      stops: [
+        [0, '#008000'],
+        [1, '#66FF66'],
+        [2, '#E6FFE6'],
+        [3, '#FF3333'],
+        [4, '#CC0000'],
+      ]
+    }
+
+  ]
+
+
     const mapContainer = useRef(null);
-    const [active, setActive] = useState(null);
+    const [active, setActive] = useState(options[0]);
     const [map, setMap] = useState(null);
     const [open, setOpen] = React.useState(false);
-
-    const options = [
-      {
-        name: 'Colors',
-        description: '',
-        property: 'color_est',
-        stops: [
-          [0, '#008000'],
-          [1, '#66FF66'],
-          [2, '#E6FFE6'],
-          [3, '#FF3333'],
-          [4, '#CC0000'],
-        ]
-      }
-
-    ]
 
     // Initialize the map
     useEffect(() => {
@@ -158,7 +156,7 @@ const Map = () => {
         <div>
           <div ref={mapContainer} className="map-container" />
           <NavBar />
-          <YearSlider />
+          <Legend active={active} />
         </div>
     );
 }

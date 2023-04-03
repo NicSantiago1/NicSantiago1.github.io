@@ -73,7 +73,7 @@ export default function NavBar() {
                             sx={{ width: 300 }} 
                             options={countryNames} 
                             autoHighlight 
-                            getOptionLabel={(option) => option.name}
+                            getOptionLabel={(option) => option.country}
                             renderInput={(params) => <TextField {...params} label="Country"/>}
                         />
                     </Toolbar>
