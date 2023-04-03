@@ -152,10 +152,19 @@ const Map = () => {
     //   }
     // }
 
+    const fly = (this.props) = {
+      if (map) {
+        map.flyTo({
+          center: [this.props.lng,this.props.lat],
+          essential: true
+        });
+      }
+    }
+
     return (
         <div>
           <div ref={mapContainer} className="map-container" />
-          <NavBar />
+          <NavBar flyTo={this.fly} />
           <Legend active={active} />
         </div>
     );
