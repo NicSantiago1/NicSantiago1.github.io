@@ -75,7 +75,7 @@ export default function NavBar({flyTo}) {
                             autoHighlight 
                             getOptionLabel={(option) => option.country}
                             renderInput={(params) => <TextField {...params} label="Country"/>}
-                            onChange={this.flyTo([(option) => option.longitude, (option) => option.latitude])}
+                            onChange={() => flyTo([(option) => option.longitude, (option) => option.latitude])}
                         />
                     </Toolbar>
                 </AppBar>
