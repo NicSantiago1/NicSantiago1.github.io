@@ -20,7 +20,7 @@ const darkTheme = createTheme({
       },
 });
 
-export default function NavBar({flyTo}) {
+export default function NavBar({ flyTo }) {
     const[country, setCountry] = React.useState(null);
     const [year, setYear] = React.useState(2020);
 
@@ -38,7 +38,7 @@ export default function NavBar({flyTo}) {
             <ThemeProvider theme={darkTheme}>
                 <AppBar color="primary">
                     <Toolbar>
-                        <Grid container spacing={3} columns = {24} alignItems="center">
+                        <Grid container spacing={3} columns={24} alignItems="center">
                             <Grid item xs>
                                 <Typography variant="h5" component="div">
                                     Migration Data Project
@@ -75,7 +75,7 @@ export default function NavBar({flyTo}) {
                             autoHighlight 
                             getOptionLabel={(option) => option.country}
                             renderInput={(params) => <TextField {...params} label="Country"/>}
-                            onChange={() => flyTo([(option) => option.longitude, (option) => option.latitude])}
+                            onChange = { (event, option) => flyTo(option.longitude) }
                         />
                     </Toolbar>
                 </AppBar>

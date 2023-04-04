@@ -29,13 +29,15 @@ const Map = () => {
     const [active, setActive] = useState(options[0]);
     const [map, setMap] = useState(null);
     const [open, setOpen] = React.useState(false);
+    const [lng, setLng] = useState(16);
+    const [lat, setLat] = useState(48);
 
     // Initialize the map
     useEffect(() => {
         const map = new mapboxgl.Map({
           container: mapContainer.current,
           style: 'mapbox://styles/nsantiago18/clex8n530000g01mszz6zanjx',
-          center: [16, 48],
+          center: [lng, lat],
           zoom: 3,
         });
 
@@ -142,29 +144,14 @@ const Map = () => {
         return () => map.remove();
     }, []);
 
-
-    // const paint = () => {
-    //   if (map) {
-    //     map.setPaintProperty('countries-fill', 'fill-color', {
-    //       property: Math.floor(Math.random() * 5),
-    //       stops: options[0].stops
-    //     });
-    //   }
-    // }
-
-    const fly = (this.props) = {
-      if (map) {
-        map.flyTo({
-          center: [this.props.lng,this.props.lat],
-          essential: true
-        });
-      }
+    const flyTo = (props) => {
+      console.log(props);
     }
 
     return (
         <div>
           <div ref={mapContainer} className="map-container" />
-          <NavBar flyTo={this.fly} />
+          <NavBar flyTo={flyTo} />
           <Legend active={active} />
         </div>
     );
