@@ -21,7 +21,6 @@ const darkTheme = createTheme({
 });
 
 export default function NavBar({ flyTo }) {
-    const[country, setCountry] = React.useState(null);
     const [year, setYear] = React.useState(2020);
 
     const handleSliderChange = (event, newValue) => {
@@ -75,7 +74,7 @@ export default function NavBar({ flyTo }) {
                             autoHighlight 
                             getOptionLabel={(option) => option.country}
                             renderInput={(params) => <TextField {...params} label="Country"/>}
-                            onChange = { (event, option) => flyTo(option.longitude) }
+                            onChange = { (event, option) => flyTo(option.longitude, option.latitude) }
                         />
                     </Toolbar>
                 </AppBar>

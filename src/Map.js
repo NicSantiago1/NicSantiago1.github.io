@@ -3,7 +3,12 @@ import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-load
 import countries from './geodata/countries.geojson';
 import NavBar from './NavBar';
 import Legend from './Legend';
+import CountryModal from './CountryModal';
 import './Map.css';
+
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibnNhbnRpYWdvMTgiLCJhIjoiY2xjcjN5cDRnMGJwbjNwbjJodjZzM2htZiJ9.j9PqvIjlbwoNyZsEqmFrqg';
 
@@ -24,10 +29,10 @@ const Map = () => {
 
   ]
 
-
     const mapContainer = useRef(null);
     const [active, setActive] = useState(options[0]);
     const [map, setMap] = useState(null);
+    const [country, setCountry] = useState(null);
     const [open, setOpen] = React.useState(false);
     const [lng, setLng] = useState(16);
     const [lat, setLat] = useState(48);
@@ -131,11 +136,12 @@ const Map = () => {
 
 
           // Country popup on click
-          const handleOpen = () => setOpen(true);
-          const handleClose = () => setOpen(false);
           map.on('click', 'countries-fill', (e) => {
-            new mapboxgl.Popup().setLngLat(e.lngLat).setHTML(e.features[0].properties.ADMIN).addTo(map);
-          })
+            setOpen(true);
+            console.log(e.features[0].properties.ADMIN);
+          });
+
+          
 
           setMap(map);
         });
@@ -144,8 +150,11 @@ const Map = () => {
         return () => map.remove();
     }, []);
 
-    const flyTo = (props) => {
-      console.log(props);
+    const flyTo = (...props) => {
+      map.flyTo({
+        center: [props[0], props[1]],
+        essential: true
+        });
     }
 
     return (
@@ -153,6 +162,9 @@ const Map = () => {
           <div ref={mapContainer} className="map-container" />
           <NavBar flyTo={flyTo} />
           <Legend active={active} />
+          <div>
+            <CountryModal open={false} />
+          </div>
         </div>
     );
 }
