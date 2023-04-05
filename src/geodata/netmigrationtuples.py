@@ -4,7 +4,7 @@ import json
 data = pd.read_excel('NetMigrationData.xls', skiprows=3)
 
 years_data = {
-    str(year): [(country, net) for country, net in zip(data['Country Code'], data[str(year)]) if not pd.isna(net)]
+    str(year): [{"country": country, "migrants": net} for country, net in zip(data['Country Code'], data[str(year)]) if not pd.isna(net)]
     for year in range(2000, 2022) if str(year) in data
 }
 
