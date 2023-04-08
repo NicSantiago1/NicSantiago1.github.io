@@ -20,9 +20,7 @@ const darkTheme = createTheme({
       },
 });
 
-export default function NavBar({ flyTo }) {
-    const [year, setYear] = React.useState(2020);
-
+export default function NavBar({ flyTo, year, setYear }) {
     const handleSliderChange = (event, newValue) => {
         setYear(newValue);
     };
@@ -45,12 +43,12 @@ export default function NavBar({ flyTo }) {
                             </Grid>
                             <Grid item xs={14}>
                                 <Slider
-                                    value={typeof year === 'number' ? year : 2020}
+                                    value={typeof year === 'number' ? year : 2021}
                                     onChange={handleSliderChange}
                                     marks
                                     color="secondary"
                                     min={2000}
-                                    max={2020}
+                                    max={2021}
                                 />
                             </Grid>
                             <Grid item xs={4}>
@@ -61,7 +59,7 @@ export default function NavBar({ flyTo }) {
                                     inputProps={{
                                       step: 1,
                                       min: 2000,
-                                      max: 2020,
+                                      max: 2021,
                                       type: 'number',
                                     }}
                                 />

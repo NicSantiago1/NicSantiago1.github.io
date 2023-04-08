@@ -1,14 +1,12 @@
 import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
-import countries from './geodata/countries.geojson';
+import countries from './geodata/countries_with_migration.geojson';
+import migrationData from './geodata/net_migration.json'
 import NavBar from './NavBar';
 import Legend from './Legend';
 import CountryModal from './CountryModal';
 import './Map.css';
 
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibnNhbnRpYWdvMTgiLCJhIjoiY2xjcjN5cDRnMGJwbjNwbjJodjZzM2htZiJ9.j9PqvIjlbwoNyZsEqmFrqg';
 
@@ -17,13 +15,13 @@ const Map = () => {
     {
       name: 'Net Migration',
       description: 'Citizens who left the country this year',
-      property: 'migrants_est',
+      property: '2021',
       stops: [
-        [0, '#008000'],
-        [1, '#66FF66'],
-        [2, '#E6FFE6'],
-        [3, '#FF3333'],
-        [4, '#CC0000'],
+        [-250000, '#CC0000'],
+        [-100000, '#FF3333'],
+        [0, '#80FF66'],
+        [100000, '#22CC00'],
+        [250000, '#0D4D00'],
       ]
     }
 
@@ -32,10 +30,14 @@ const Map = () => {
     const mapContainer = useRef(null);
     const [active, setActive] = useState(options[0]);
     const [map, setMap] = useState(null);
-    const [country, setCountry] = useState(null);
+    const [year, setYear] = useState(2021);
+    const [country, setCountry] = useState({});
     const [open, setOpen] = React.useState(false);
     const [lng, setLng] = useState(16);
     const [lat, setLat] = useState(48);
+
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
 
     // Initialize the map
     useEffect(() => {
@@ -92,6 +94,11 @@ const Map = () => {
             'country-label'
           );
 
+          map.setPaintProperty('countries-fill', 'fill-color', {
+            property: active.property,
+            stops: active.stops
+          })
+
           // Hover effect to change opacity of country fill
           map.on('mousemove', 'countries-fill', (e) => {
             if (e.features.length > 0) {
@@ -137,8 +144,13 @@ const Map = () => {
 
           // Country popup on click
           map.on('click', 'countries-fill', (e) => {
-            setOpen(true);
-            console.log(e.features[0].properties.ADMIN);
+            handleOpen();
+            setCountry(
+              country => ({
+                ...country,
+                ...e.features[0].properties
+              })
+            );
           });
 
           
@@ -148,7 +160,7 @@ const Map = () => {
 
 
         return () => map.remove();
-    }, []);
+    }, [active, year,country,open]);
 
     const flyTo = (...props) => {
       map.flyTo({
@@ -160,11 +172,11 @@ const Map = () => {
     return (
         <div>
           <div ref={mapContainer} className="map-container" />
-          <NavBar flyTo={flyTo} />
-          <Legend active={active} />
-          <div>
-            <CountryModal open={false} />
-          </div>
+          <NavBar flyTo={flyTo} year={year} setYear={setYear} />
+          <Legend active={active} year={year} />
+          {open && 
+            <CountryModal open={open} close={handleClose} country={country}/>
+          }
         </div>
     );
 }

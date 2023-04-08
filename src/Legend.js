@@ -14,7 +14,7 @@ export default function Legend(props) {
             <Card sx={{ maxWidth: 250, position: 'absolute', right: 0, bottom: 0, mb: 5, mr: 5 }}>
                 <CardContent>
                     <Typography variant="h6" component="div">
-                        2020 {props.active.name}
+                        {props.year} {props.active.name}
                     </Typography>
                     <Stack spacing={0}>
                         <Typography variant="body1" >
