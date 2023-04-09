@@ -17,11 +17,13 @@ const Map = () => {
       description: 'Citizens who left the country this year',
       property: '2021',
       stops: [
-        [-250000, '#CC0000'],
-        [-100000, '#FF3333'],
-        [0, '#80FF66'],
-        [100000, '#22CC00'],
-        [250000, '#0D4D00'],
+        [-250000, '#7a0000'],
+        [-100000, '#de0202'],
+        [-50000, '#de3333'],
+        [0, '#d67878'],
+        [50000, '#92cf86'],
+        [100000, '#59c942'],
+        [250000, '#0e5200'],
       ]
     }
 
@@ -82,12 +84,11 @@ const Map = () => {
               source: 'countries',
               layout: {},
               paint: {
-                'fill-color': '#0055FF',
                 'fill-opacity': [
                   'case',
                   ['boolean', ['feature-state', 'hover'], false],
                   1,
-                  0.5
+                  0.7
                 ]
               }
             },
@@ -161,6 +162,19 @@ const Map = () => {
 
         return () => map.remove();
     }, [active, year,country,open]);
+
+    useEffect(() => {
+      paint();
+    }, [active]);
+
+    const paint = () => {
+      if (map) {
+        map.setPaintProperty('countries-fill', 'fill-color', {
+          property: active.property,
+          stops: active.stops
+        });
+      }
+    };
 
     const flyTo = (...props) => {
       map.flyTo({
