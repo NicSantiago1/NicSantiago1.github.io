@@ -1,42 +1,25 @@
 import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import countries from './geodata/countries_with_migration.geojson';
-import migrationData from './geodata/net_migration.json'
 import NavBar from './NavBar';
 import Legend from './Legend';
 import CountryModal from './CountryModal';
 import './Map.css';
 
+import { YearOptions } from './YearOptions';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibnNhbnRpYWdvMTgiLCJhIjoiY2xjcjN5cDRnMGJwbjNwbjJodjZzM2htZiJ9.j9PqvIjlbwoNyZsEqmFrqg';
 
 const Map = () => {
-  const options = [
-    {
-      name: 'Net Migration',
-      description: 'Citizens who left the country this year',
-      property: '2021',
-      stops: [
-        [-250000, '#7a0000'],
-        [-100000, '#de0202'],
-        [-50000, '#de3333'],
-        [0, '#d67878'],
-        [50000, '#92cf86'],
-        [100000, '#59c942'],
-        [250000, '#0e5200'],
-      ]
-    }
-
-  ]
-
     const mapContainer = useRef(null);
-    const [active, setActive] = useState(options[0]);
+    const [active, setActive] = useState(YearOptions[21]);
     const [map, setMap] = useState(null);
     const [year, setYear] = useState(2021);
     const [country, setCountry] = useState({});
     const [open, setOpen] = React.useState(false);
     const [lng, setLng] = useState(16);
     const [lat, setLat] = useState(48);
+    const [zoom, setZoom] = useState(3);
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -47,7 +30,7 @@ const Map = () => {
           container: mapContainer.current,
           style: 'mapbox://styles/nsantiago18/clex8n530000g01mszz6zanjx',
           center: [lng, lat],
-          zoom: 3,
+          zoom: zoom,
         });
 
         let hoveredStateId = null;
@@ -61,21 +44,6 @@ const Map = () => {
               'generateId': true
           });
 
-          // Add in an outline layer from the geojson source
-          map.addLayer(
-            {
-              id: 'countries-outline',
-              type: 'line',
-              source: 'countries',
-              layout: {},
-              paint: {
-                'line-color': '#000',
-                'line-width': 1
-                }
-            },
-            'country-label'
-          );
-
           // Add in a color fill layer from the geojson source
           map.addLayer(
             {
@@ -88,9 +56,24 @@ const Map = () => {
                   'case',
                   ['boolean', ['feature-state', 'hover'], false],
                   1,
-                  0.7
+                  0.8
                 ]
               }
+            },
+            'country-label'
+          );
+
+          // Add in an outline layer from the geojson source
+          map.addLayer(
+            {
+              id: 'countries-outline',
+              type: 'line',
+              source: 'countries',
+              layout: {},
+              paint: {
+                'line-color': '#000',
+                'line-width': 0.7
+                }
             },
             'country-label'
           );
@@ -161,32 +144,33 @@ const Map = () => {
 
 
         return () => map.remove();
-    }, [active, year,country,open]);
+    }, [active,year,country,open]);
 
-    useEffect(() => {
-      paint();
-    }, [active]);
-
-    const paint = () => {
-      if (map) {
-        map.setPaintProperty('countries-fill', 'fill-color', {
-          property: active.property,
-          stops: active.stops
-        });
-      }
+    const updateActive = (i) => {
+      setActive(YearOptions[i]);
+      console.log(active.property);
+      map.setPaintProperty('countries-fill', 'fill-color', {
+        property: active.property,
+        stops: active.stops
+      });
     };
 
-    const flyTo = (...props) => {
-      map.flyTo({
-        center: [props[0], props[1]],
-        essential: true
+    const flyTo = (props) => {
+      if (props){
+        map.flyTo({
+          center: [props.longitude, props.latitude],
+          duration: 2000,
+          essential: true,
+          zoom: 5
         });
+  
+      }
     }
 
     return (
         <div>
           <div ref={mapContainer} className="map-container" />
-          <NavBar flyTo={flyTo} year={year} setYear={setYear} />
+          <NavBar flyTo={flyTo} year={year} setYear={setYear} updateActive={updateActive} />
           <Legend active={active} year={year} />
           {open && 
             <CountryModal open={open} close={handleClose} country={country}/>

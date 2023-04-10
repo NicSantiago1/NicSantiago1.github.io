@@ -20,12 +20,18 @@ const darkTheme = createTheme({
       },
 });
 
-export default function NavBar({ flyTo, year, setYear }) {
+export default function NavBar({ flyTo, year, setYear, updateActive }) {
     const handleSliderChange = (event, newValue) => {
+        if (newValue > 1999 && newValue < 2022){
+            updateActive(newValue-2000);
+        }
         setYear(newValue);
     };
 
     const handleInputChange = (event) => {
+        if (Number(event.target.value) > 1999 && Number(event.target.value) < 2022){
+            updateActive(Number(event.target.value) - 2000);
+        }
         setYear(event.target.value === '' ? '' : Number(event.target.value));
     };
 
@@ -72,7 +78,7 @@ export default function NavBar({ flyTo, year, setYear }) {
                             autoHighlight 
                             getOptionLabel={(option) => option.country}
                             renderInput={(params) => <TextField {...params} label="Country"/>}
-                            onChange = { (event, option) => flyTo(option.longitude, option.latitude) }
+                            onChange = { (event, option) => flyTo(option) }
                         />
                     </Toolbar>
                 </AppBar>
