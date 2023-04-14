@@ -8,9 +8,11 @@ import Stack from '@mui/material/Stack';
 import CircleIcon from '@mui/icons-material/Circle';
 
 export default function Legend(props) {
+    let right = props.open ? 140 : 5;
+
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <Card sx={{ maxWidth: 250, position: 'absolute', right: 0, bottom: 0, mb: 5, mr: 5 }}>
+            <Card sx={{ maxWidth: 250, position: 'absolute', right: 0, bottom: 0, mb: 5, mr: right }}>
                 <CardContent>
                     <Typography variant="h6" component="div">
                         {props.year} {props.active.name}

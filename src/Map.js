@@ -24,6 +24,14 @@ const Map = () => {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
+    let mapStyle = {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      height: '100vh',
+      width: '100vw'
+    };
+
     // Initialize the map
     useEffect(() => {
         const map = new mapboxgl.Map({
@@ -169,11 +177,11 @@ const Map = () => {
 
     return (
         <div>
-          <div ref={mapContainer} className="map-container" />
+          <div ref={mapContainer} style={mapStyle} />
           <NavBar flyTo={flyTo} year={year} setYear={setYear} updateActive={updateActive} />
-          <Legend active={active} year={year} />
+          <Legend active={active} year={year} open={open} />
           {open && 
-            <CountryModal open={open} close={handleClose} country={country}/>
+            <CountryModal open={open} handleClose={handleClose} country={country}/>
           }
         </div>
     );
