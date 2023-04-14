@@ -24,15 +24,16 @@ export default function NavBar({ flyTo, year, setYear, updateActive }) {
     const handleSliderChange = (event, newValue) => {
         if (newValue > 1999 && newValue < 2022){
             updateActive(newValue-2000);
+            setYear(newValue);
         }
-        setYear(newValue);
     };
 
     const handleInputChange = (event) => {
+        console.log(event.target.value)
         if (Number(event.target.value) > 1999 && Number(event.target.value) < 2022){
             updateActive(Number(event.target.value) - 2000);
+            setYear(event.target.value === '' ? '' : Number(event.target.value));
         }
-        setYear(event.target.value === '' ? '' : Number(event.target.value));
     };
 
 
@@ -68,6 +69,7 @@ export default function NavBar({ flyTo, year, setYear, updateActive }) {
                                       max: 2021,
                                       type: 'number',
                                     }}
+                                    disabled
                                 />
                             </Grid>
                         </Grid>
