@@ -175,23 +175,27 @@ const Map = () => {
         <div>
           <div ref={mapContainer} className="map-container" />
           <NavBar flyTo={flyTo} year={year} setYear={setYear} updateActive={updateActive} />
-          <Legend active={active} year={year} />
-          <Box sx={{ flexGrow: 1 }}>
-            <Card sx={{ maxWidth: 250, position: 'absolute', right: 225, bottom: 0, mb: 5, mr: 5 }}>
-                <CardContent>
-                <MigrationTopChart year={year} mode="source" title="Top Migration Sources"/>
-                </CardContent>
-            </Card>
-          </Box>
-          <Box sx={{ flexGrow: 1 }}>
-            <Card sx={{ maxWidth: 250, position: 'absolute', right: 475, bottom: 0, mb: 5, mr: 5 }}>
-                <CardContent>
-                <MigrationTopChart year={year} mode="destination" title="Top Migration Destination"/>
-                </CardContent>
-            </Card>
-          </Box>
+          <Legend active={active} year={year} open={open} />
+          {!open && 
+            <Box sx={{ flexGrow: 1 }}>
+              <Card sx={{ maxWidth: 250, position: 'absolute', right: 225, bottom: 0, mb: 5, mr: 5 }}>
+                  <CardContent>
+                  <MigrationTopChart year={year} mode="source" title="Top Migration Sources"/>
+                  </CardContent>
+              </Card>
+            </Box>
+          }
+         {!open && 
+            <Box sx={{ flexGrow: 1 }}>
+              <Card sx={{ maxWidth: 250, position: 'absolute', right: 475, bottom: 0, mb: 5, mr: 5 }}>
+                  <CardContent>
+                  <MigrationTopChart year={year} mode="destination" title="Top Migration Destination"/>
+                  </CardContent>
+              </Card>
+            </Box>
+         }
           {open && 
-            <CountryModal open={open} close={handleClose} country={country}/>
+            <CountryModal open={open} handleClose={handleClose} country={country}/>
           }
         </div>
     );

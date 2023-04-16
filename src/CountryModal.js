@@ -3,7 +3,7 @@ import { Bar } from 'react-chartjs-2';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
+import Paper from '@mui/material/Paper';
 
 // load and prepare data
 import migrationData from './geodata/net_migration.json';
@@ -46,16 +46,15 @@ const chartOptions = {
 
 
 export default function CountryModal(props) {
-    const [open, setOpen] = React.useState(props.open);
-    const handleClose = () => setOpen(false);
     const countryCode = props.country.ISO_A3;
     const chartData = prepareChartData(countryCode);
 
     return (
-        <Modal open={open} onClose={props.close}>
-            <Box sx={{ position: 'absolute', top:'20%', left:'10%', width: '80%', height: '70%', bgcolor: 'background.paper'}}>
-                <Typography id="modal-modal-title" variant="h6" component="h2">
+        <Paper elevation={3}>
+            <Box sx={{ position: 'absolute', top:'10%', right:'1%', width: '20%', height: '86%', bgcolor: 'background.paper'}}>
+                <Typography id="modal-modal-title" variant="h6" align="center" component="h2">
                     {props.country.ADMIN}
+                    <Button onClick={props.handleClose} > Close </Button> 
                 </Typography>
                 <Box sx={{ padding: 2, width: 'calc(100% - 48px)', height: 'calc(100% - 48px)' }}>
                     <div style={{ width: '100%', height: '100%' }}>
@@ -63,6 +62,6 @@ export default function CountryModal(props) {
                     </div>
                 </Box>
             </Box>
-        </Modal>
+        </Paper>
     );
 }
