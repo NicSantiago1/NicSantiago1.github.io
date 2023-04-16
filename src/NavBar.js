@@ -82,7 +82,6 @@ export default function NavBar({ flyTo, year, setYear, updateActive }) {
                                       max: 2021,
                                       type: 'number',
                                     }}
-                                    disabled
                                 />
                             </Grid>
                             <Grid item xs={8}>
