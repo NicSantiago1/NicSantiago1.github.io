@@ -4,9 +4,11 @@ import countries from './geodata/countries_with_migration.geojson';
 import NavBar from './NavBar';
 import Legend from './Legend';
 import CountryModal from './CountryModal';
+import { YearOptions } from './YearOptions';
 import './Map.css';
 
-import { YearOptions } from './YearOptions';
+import { Box, Card, CardContent } from '@mui/material';
+
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibnNhbnRpYWdvMTgiLCJhIjoiY2xjcjN5cDRnMGJwbjNwbjJodjZzM2htZiJ9.j9PqvIjlbwoNyZsEqmFrqg';
 
@@ -180,6 +182,21 @@ const Map = () => {
           <div ref={mapContainer} style={mapStyle} />
           <NavBar flyTo={flyTo} year={year} setYear={setYear} updateActive={updateActive} />
           <Legend active={active} year={year} open={open} />
+          <Legend active={active} year={year} />
+          <Box sx={{ flexGrow: 1 }}>
+            <Card sx={{ maxWidth: 250, position: 'absolute', right: 225, bottom: 0, mb: 5, mr: 5 }}>
+                <CardContent>
+                <MigrationTopChart year={year} mode="source" title="Top Migration Sources"/>
+                </CardContent>
+            </Card>
+          </Box>
+          <Box sx={{ flexGrow: 1 }}>
+            <Card sx={{ maxWidth: 250, position: 'absolute', right: 475, bottom: 0, mb: 5, mr: 5 }}>
+                <CardContent>
+                <MigrationTopChart year={year} mode="destination" title="Top Migration Destination"/>
+                </CardContent>
+            </Card>
+          </Box>
           {open && 
             <CountryModal open={open} handleClose={handleClose} country={country}/>
           }
