@@ -10,6 +10,7 @@ import Slider from '@mui/material/Slider';
 import MuiInput from '@mui/material/Input';
 import Autocomplete from '@mui/material/Autocomplete';
 import countryNames from './geodata/countrynames.json';
+import migrationData from './geodata/net_migration.json';
 
 const darkTheme = createTheme({
     palette: {
@@ -19,6 +20,11 @@ const darkTheme = createTheme({
         },
       },
 });
+
+const countryCodeToName = countryNames.reduce((acc, country) => {
+    acc[country.alpha3] = country.country;
+    return acc;
+  }, {});
 
 export default function NavBar({ flyTo, year, setYear, updateActive }) {
     const handleSliderChange = (event, newValue) => {
@@ -36,13 +42,20 @@ export default function NavBar({ flyTo, year, setYear, updateActive }) {
         }
     };
 
+    const getTotalMigrants = (year) => {
+        const yearData = migrationData[year] || [];
+        const filteredYearData = yearData.filter(({country}) => countryCodeToName.hasOwnProperty(country));
+        return Math.ceil(filteredYearData.reduce((acc, cur) => acc + Math.abs(cur.migrants), 0) / 2.0); // divide by two, as we count each migrant twice, once at his destination and once 
+    };
+
+    const migrantsNumber = getTotalMigrants(year);
 
     return(
         <Box sx={{ flexGrow: 1}}>
             <ThemeProvider theme={darkTheme}>
                 <AppBar color="primary">
                     <Toolbar>
-                        <Grid container spacing={3} columns={24} alignItems="center">
+                        <Grid container spacing={3} columns={32} alignItems="center">
                             <Grid item xs>
                                 <Typography variant="h5" component="div">
                                     Migration Data Project
@@ -69,8 +82,12 @@ export default function NavBar({ flyTo, year, setYear, updateActive }) {
                                       max: 2021,
                                       type: 'number',
                                     }}
-                                    disabled
                                 />
+                            </Grid>
+                            <Grid item xs={8}>
+                                <Typography variant="h5" component="div">
+                                    Migrants #: {migrantsNumber.toLocaleString()}
+                                </Typography>
                             </Grid>
                         </Grid>
                         <Autocomplete 

@@ -22,9 +22,20 @@ years_data = {
 
 for feature in geojson_data['features']:
     country_code = feature['properties']['ISO_A3']
-
+    migration_values = []
     for year, net in years_data.items():
-        feature['properties'][year] = net.get(country_code)
+        migration_value = net.get(country_code)
+        if migration_value is not None:
+            migration_values.append(migration_value)
+        feature['properties'][year] = migration_value
 
-with open('countries_with_migration_and_flags.geojson', 'w') as f:
+    if migration_values:
+        feature['properties']['Min'] = min(migration_values)
+        feature['properties']['Max'] = max(migration_values)
+    else:
+        feature['properties']['Min'] = None
+        feature['properties']['Max'] = None
+
+# Write updated GeoJSON to file
+with open('countries_with_migration.geojson', 'w') as f:
     json.dump(geojson_data, f)
