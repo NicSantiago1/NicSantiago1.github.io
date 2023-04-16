@@ -3,7 +3,11 @@ import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-load
 import countries from './geodata/countries_with_migration.geojson';
 import NavBar from './NavBar';
 import Legend from './Legend';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Box from '@mui/material/Box';
 import CountryModal from './CountryModal';
+import MigrationTopChart from './MigrationTopChart';
 import './Map.css';
 
 import { YearOptions } from './YearOptions';
@@ -172,6 +176,20 @@ const Map = () => {
           <div ref={mapContainer} className="map-container" />
           <NavBar flyTo={flyTo} year={year} setYear={setYear} updateActive={updateActive} />
           <Legend active={active} year={year} />
+          <Box sx={{ flexGrow: 1 }}>
+            <Card sx={{ maxWidth: 250, position: 'absolute', right: 225, bottom: 0, mb: 5, mr: 5 }}>
+                <CardContent>
+                <MigrationTopChart year={year} mode="source" title="Top Migration Sources"/>
+                </CardContent>
+            </Card>
+          </Box>
+          <Box sx={{ flexGrow: 1 }}>
+            <Card sx={{ maxWidth: 250, position: 'absolute', right: 475, bottom: 0, mb: 5, mr: 5 }}>
+                <CardContent>
+                <MigrationTopChart year={year} mode="destination" title="Top Migration Destination"/>
+                </CardContent>
+            </Card>
+          </Box>
           {open && 
             <CountryModal open={open} close={handleClose} country={country}/>
           }
