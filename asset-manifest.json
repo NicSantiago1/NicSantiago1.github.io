@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/main/public/static/css/main.3f6b1d67.chunk.css",
+    "main.js": "/main/public/static/js/main.1444af26.chunk.js",
+    "main.js.map": "/main/public/static/js/main.1444af26.chunk.js.map",
+    "runtime-main.js": "/main/public/static/js/runtime-main.021c39ec.js",
+    "runtime-main.js.map": "/main/public/static/js/runtime-main.021c39ec.js.map",
+    "static/css/2.0ac4b39b.chunk.css": "/main/public/static/css/2.0ac4b39b.chunk.css",
+    "static/js/2.26c21ab5.chunk.js": "/main/public/static/js/2.26c21ab5.chunk.js",
+    "static/js/2.26c21ab5.chunk.js.map": "/main/public/static/js/2.26c21ab5.chunk.js.map",
+    "index.html": "/main/public/index.html",
+    "static/css/2.0ac4b39b.chunk.css.map": "/main/public/static/css/2.0ac4b39b.chunk.css.map",
+    "static/css/main.3f6b1d67.chunk.css.map": "/main/public/static/css/main.3f6b1d67.chunk.css.map",
+    "static/js/2.26c21ab5.chunk.js.LICENSE.txt": "/main/public/static/js/2.26c21ab5.chunk.js.LICENSE.txt",
+    "static/media/countries_with_migration.92c58d0e.geojson": "/main/public/static/media/countries_with_migration.92c58d0e.geojson"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.021c39ec.js",
+    "static/css/2.0ac4b39b.chunk.css",
+    "static/js/2.26c21ab5.chunk.js",
+    "static/css/main.3f6b1d67.chunk.css",
+    "static/js/main.1444af26.chunk.js"
+  ]
+}
