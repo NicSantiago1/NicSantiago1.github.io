@@ -1,7 +1,7 @@
 {
   "name": "senior-project",
   "version": "0.1.0",
-  "homepage": "https://NicSantiago1.github.io/main/public",
+  "homepage": "https://NicSantiago1.github.io/main",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.6",
